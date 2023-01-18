@@ -131,12 +131,13 @@ y_min = -1.5    # bottom of y axis
 y_max = 2  # top of y axis
 
 # Animation settings
-pause_at_time = 0.0        # Time to pause animation to save different 
-pause_duration = 5         # How long (seconds) to pause for
-pause = True               # Will pause at time when set to True
-steps = 2001               # The number of steps in the animation and time points on the x axis
+pause_at_time = [-1, 0.0, 1, 2, 3]  # Times to pause animation to save different
+# pause_at_time = [0, 1]  # An example of pause_at_time which pauses at 0 and 1
+pause_duration = 3  # How long (seconds) to pause for
+pause = True  # Will pause at time when set to True
+steps = 2001  # The number of steps in the animation and time points on the x axis
 delay_between_frames = 15  # Specifies how many ms between each fram (lower=faster)
-frames_skipped = 8         # Number of frames to skip. Improves performance. Higher = faster.
+frames_skipped = 8  # Number of frames to skip. Improves performance. Higher = faster.
 
 
 ## Beyond this point you just have to run the sections not change any parameters 
@@ -163,7 +164,12 @@ f_conv_g = np.convolve(f(x), g(x), mode='same') * (x[1]-x[0])
 # Figure out which frame to pause on
 pause_frames = None
 if pause:
-    pause_frames = np.argmin(np.abs(t-pause_at_time))+1
+    pause_frames = []
+    if np.size(pause_at_time) == 1:
+        pause_frames.append(np.argmin(np.abs(t-pause_at_time))+1)
+    else:
+        for pt in pause_at_time:
+            pause_frames.append(np.argmin(np.abs(t-pt))+1)
 
 # Function which updates the plot
 def animate(i, t, ax, pause_frames=None):
@@ -173,7 +179,7 @@ def animate(i, t, ax, pause_frames=None):
     g_line, = ax.plot(t, g(-(t-t[i])), 'b')
     line, = ax.plot(x[:(i+1)], f_conv_g[:(i+1)], color='k')
     if pause_frames is not None:
-        if i == pause_frames:
+        if i in pause_frames:
             time.sleep(pause_duration)
     return line, f_line, g_line, area_line
     
@@ -198,18 +204,19 @@ ax.legend(loc='upper right')
 frame_range = np.arange(0, steps, frames_skipped)
 
 # Insert the frame on which to pause
-if pause_frames not in frame_range:
-    for i in range(len(frame_range)):
-        if frame_range[i] > pause_frames:
-            frame_range = np.insert(frame_range, i, pause_frames)
-            break
-        
-# Insert the frame before the pause if it is not there
-if pause_frames-1 not in frame_range:
-    for i in range(len(frame_range)):
-        if frame_range[i] > pause_frames-1:
-            frame_range = np.insert(frame_range, i, pause_frames-1)
-            break
+for pause_frame in pause_frames:
+    if pause_frame not in frame_range:
+        for i in range(len(frame_range)):
+            if frame_range[i] > pause_frame:
+                frame_range = np.insert(frame_range, i, pause_frame)
+                break
+            
+    # Insert the frame before the pause if it is not there
+    if pause_frame-1 not in frame_range:
+        for i in range(len(frame_range)):
+            if frame_range[i] > pause_frame-1:
+                frame_range = np.insert(frame_range, i, pause_frame-1)
+                break
 end_pause_index = frame_range[-1]
 # create the actual animation    
 ani = animation.FuncAnimation(
