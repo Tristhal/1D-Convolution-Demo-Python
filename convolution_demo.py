@@ -73,7 +73,19 @@ def triangle(x):
     return y
 
 def exponential_decay(x):
-    return exponential(-x)
+    return np.exp(-x)
+
+def positive_exponential_decay(x):
+    ''' Exponential function which is 0 for x<0'''
+    return np.exp(-x) * step(x)
+
+def sinusoid_1_period(x):
+    period = np.pi  # set the period of the sin. could make smaller or larger
+    box_stretch = np.pi  #1 period wide
+    box_shift = box_stretch/2  # The box should be shifted so it starts at 0 instead of -0.5
+    
+    y = np.sin(x*(2*np.pi)/period) * box(1/box_stretch*(x-box_shift))
+    return y
 
 
 # This is a template to write your own function. You can write multiple and use them
