@@ -4,12 +4,11 @@
 
 Convolution Demo
 This program displays an animation of two functions being convolved together.
-Custom user-defined functions are supported and the. A discrete, 
-linear convolution is performed using numpy.
+Custom user-defined functions are supported.
  
 
 -- Instructions --
-This demo has several sections made to be run in spyder or similar IPython based IDE
+This demo has several sections to be run in spyder or similar IPython based IDE
 
 Spyder can be obtained by installing the Anaconda distribution of
  python https://www.anaconda.com/products/distribution then a program
@@ -17,23 +16,23 @@ Spyder can be obtained by installing the Anaconda distribution of
 
 There are 4 sections
 1 - Function definitions
-    In this section the functions to be used are defined. There are some
-    commonly used functions used. There is also an example function which combines
-    two other functions so that you can write your own. There is also code
-    included to plot your functions to make sure they are as you expect.
+    In this section the functions to be used are defined. Some common functions 
+    are provided, including an example which combines two other functions. You 
+    are encouraged to create your own functions. 
+    The last portion of this section plots a function so that you can check if 
+    they are as expected.
     
 2 - Setting the parameters for the convolution 
     In this section you will choose which functions to convolve as well as
-    the parameters of the animation. The start end end value can be selected
+    the parameters of the animation. The start and end value can be selected
     as well as a value where the animation will pause. Simply input the value
     at which you wish the animation to pause.
 
 Nothing after this point needs to be modified
 
 3 - Plotting the functions
-    Simply run this section. In this section the two functions being convolved 
-    are plotted f * g. Here you can check to ensure your functions are correct 
-    and you have selected an apropriate x/t  axis.
+    Simply run this section. The two functions being convolved are plotted as 
+    f and g, so you can check to ensure your functions are correct. 
     
 4 - Running the animation
     Run this section to see the animation. 
@@ -46,21 +45,23 @@ Note: to run a section you can press ctrl + enter or right click the area and
 Note: If the plotting/program stops working try closing the console 
  (hitting the x) or restarting it (right click on the "Console" tab on the 
  right). If that fails you can restart Spyder.
-Note: The x-axis should be infinitely long but that isn't possible as a result
- there can be
+Note: The x-axis is supposed to extend to infinity, but that is not adding 
+ extra info for space-limited functions. If the function is not space-limited
+ there can be errors at the edges.
 
 """
-#%% 1 - Some usefull functions as an example
+#%% 1 - Some usefull functions as examples
 # You can right click in a black space and click run cell to run each block in spyder
 # You can also hit ctrl+enter while the area is highlighted
 # You could also just run the whole file with the green play/run button above
-# Imports
+# Imports. Do not change the following 5 lines.
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import time
 plt.close('all')  # Closes all plots
 
+# Define functions. Modify and/or add new functions as you wish.
 def box(x):
     T = 0.5
     return (x>-T) * (x<T) * 1.0
@@ -132,26 +133,27 @@ plt.show()  # displays the plot in the plotting menu to the right, or it pops ou
 %matplotlib qt5
 
 # Selecting your functions to convolve
-f = triangle  # Change these to whatever functions you want to convolve
-g = biphasic_unitary_step  # You can define your own above and plot them
+f = triangle  # Change f & g to whatever functions you want to convolve
+g = positive_exponential_decay  # You can use your own function defined above
 
 # Parameters for t axis
-t_min = -10   # Shortest t value to be plotted
-t_max = 10    # Longest t value point to be plotted
-y_min = -1.5    # bottom of y axis
-y_max = 2  # top of y axis
+t_min = -10   # lower limit of x axis 
+t_max = 10    # higher limit of x axis 
+y_min = -1.5    # Lower limit of y axis
+y_max = 2  # higher limit of y axis
 
 # Animation settings
-pause_at_t = 0  # t value to pause animation to save different portions
+pause_at_t = 0  # t value to pause animation. This is the x axis value.
 # pause_at_t = [-1, 0.0, 1, 2, 3]  # An example of pause_at_t which pauses at multiple t values
 pause_duration = 3  # How long (seconds) to pause for
 pause = True  # Will pause at the specified t value(s) when set to True
-steps = 2001  # The number of steps in the animation and t points on the x axis
+steps = 2001  # The number of steps in the animation. The x axis is discretized into this number of points.
+# If "steps" is set to small, a coarse resoution on x axis means you may miss the point pause_at_t and the pause occurs at its nearest neighbor.
 delay_between_frames = 15  # Specifies how many ms between each frame (lower=faster)
 frames_skipped = 8  # Number of frames to skip. Improves performance. Higher = faster.
 
 
-## Beyond this point you just have to run the sections not change any parameters 
+## Beyond this point you only need to run the sections without changing any parameters 
 #%% 3 - Plotting the functions selected
 x = np.linspace(t_min, t_max, steps)
 t = np.linspace(t_min, t_max, steps)
@@ -232,5 +234,5 @@ end_pause_index = frame_range[-1]
 # create the actual animation    
 ani = animation.FuncAnimation(
     fig, lambda j: animate(j, t, ax, pause_frames), frames=frame_range,
-    interval=delay_between_frames, blit=True, save_count=50, cache_frame_data=False)
+    interval=delay_between_frames, blit=True, save_count=1)#, cache_frame_data=False)
 plt.show()
