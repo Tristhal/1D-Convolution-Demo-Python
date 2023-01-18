@@ -36,17 +36,22 @@ Nothing after this point needs to be modified
     and you have selected an apropriate x (time) axis.
     
 4 - Running the animation
-    Run this section to see the animation.
+    Run this section to see the animation. 
+    ***Remember to close the amination before running another one***
     
 Note: to run a section you can press ctrl + enter or right click the area and
  select "run cell". You can also just run the whole file with f5 or the green 
  run arrow
+Note: If the plotting/program stops working try closing the console 
+ (hitting the x) or restarting it (right click on the "Console" tab on the 
+ right). If that fails you can restart Spyder.
 """
 #%% 0 - Imports (Must run first)
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import time
+plt.close('all')  # Closes all plots
 
 #%% 1 - Some usefull functions as an example
 # You can right click in a black space and click run cell to run each block in spyder
