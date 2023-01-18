@@ -24,8 +24,8 @@ There are 4 sections
     
 2 - Setting the parameters for the convolution 
     In this section you will choose which functions to convolve as well as
-    the parameters of the animation. The start end end time can be selected
-    as well as a time where the animation will pause. Simply input the time
+    the parameters of the animation. The start end end value can be selected
+    as well as a value where the animation will pause. Simply input the value
     at which you wish the animation to pause.
 
 Nothing after this point needs to be modified
@@ -33,7 +33,7 @@ Nothing after this point needs to be modified
 3 - Plotting the functions
     Simply run this section. In this section the two functions being convolved 
     are plotted f * g. Here you can check to ensure your functions are correct 
-    and you have selected an apropriate x (time) axis.
+    and you have selected an apropriate x/t  axis.
     
 4 - Running the animation
     Run this section to see the animation. 
@@ -46,6 +46,8 @@ Note: to run a section you can press ctrl + enter or right click the area and
 Note: If the plotting/program stops working try closing the console 
  (hitting the x) or restarting it (right click on the "Console" tab on the 
  right). If that fails you can restart Spyder.
+Note: The x-axis should be infinitely long but that isn't possible as a result
+ there can be
 
 """
 #%% 1 - Some usefull functions as an example
@@ -116,8 +118,7 @@ def your_function(x):
 # Sample code to plot your function
 t = np.linspace(-5, 5, 1000)
 plt.figure()  # Make a figure
-plt.plot(t, sinusoid_1_period_phase_shifted(t))  # This is where you set the function you want to plot
-plt.plot(t, sinusoid_1_period(t))  # This is where you set the function you want to plot
+plt.plot(t, triangle(t))  # This is where you set the function you want to plot
 plt.show()  # displays the plot in the plotting menu to the right, or it pops out
 
 
@@ -131,21 +132,21 @@ plt.show()  # displays the plot in the plotting menu to the right, or it pops ou
 %matplotlib qt5
 
 # Selecting your functions to convolve
-f = sinusoid_1_period  # Change these to whatever functions you want to convolve
-g = sinusoid_1_period_phase_shifted  # You can define your own above and plot them
+f = triangle  # Change these to whatever functions you want to convolve
+g = biphasic_unitary_step  # You can define your own above and plot them
 
-# Parameters for time axis
-t_min = -10   # Shortest time to be plotted
-t_max = 10    # Longest time point to be plotted
+# Parameters for t axis
+t_min = -10   # Shortest t value to be plotted
+t_max = 10    # Longest t value point to be plotted
 y_min = -1.5    # bottom of y axis
 y_max = 2  # top of y axis
 
 # Animation settings
-pause_at_time = 0  # Time to pause animation to save different portions
-# pause_at_time = [-1, 0.0, 1, 2, 3]  # An example of pause_at_time which pauses at multiple times
+pause_at_t = 0  # t value to pause animation to save different portions
+# pause_at_t = [-1, 0.0, 1, 2, 3]  # An example of pause_at_t which pauses at multiple t values
 pause_duration = 3  # How long (seconds) to pause for
-pause = True  # Will pause at the specified time(s) when set to True
-steps = 2001  # The number of steps in the animation and time points on the x axis
+pause = True  # Will pause at the specified t value(s) when set to True
+steps = 2001  # The number of steps in the animation and t points on the x axis
 delay_between_frames = 15  # Specifies how many ms between each frame (lower=faster)
 frames_skipped = 8  # Number of frames to skip. Improves performance. Higher = faster.
 
@@ -157,10 +158,10 @@ t = np.linspace(t_min, t_max, steps)
 
 # Plotting f(x) and g(x)
 plt.figure()  # Make a figure
-plt.plot(x, f(x), 'r', label='f(x)')  # x=x values, f(x)=y values, label adds a label for the legend
-plt.plot(x, g(x), 'b--', label='g(x)')  # x=x values, g(x)=y values, label adds a label for the legend
+plt.plot(x, f(x), 'r', label='f(t)')  # x=x values, f(x)=y values, label adds a label for the legend
+plt.plot(x, g(x), 'b--', label='g(t)')  # x=x values, g(x)=y values, label adds a label for the legend
 plt.ylim(y_min, y_max)
-plt.xlabel("Time")
+plt.xlabel("t")
 plt.ylabel("Amplitude")
 plt.legend()  # shows the legend
 plt.show()  # displays the plot in the plotting menu to the right, or it pops out
@@ -175,10 +176,10 @@ f_conv_g = np.convolve(f(x), g(x), mode='same') * (x[1]-x[0])
 pause_frames = None
 if pause:
     pause_frames = []
-    if np.size(pause_at_time) == 1:
-        pause_frames.append(np.argmin(np.abs(t-pause_at_time))+1)
+    if np.size(pause_at_t) == 1:
+        pause_frames.append(np.argmin(np.abs(t-pause_at_t))+1)
     else:
-        for pt in pause_at_time:
+        for pt in pause_at_t:
             pause_frames.append(np.argmin(np.abs(t-pt))+1)
 
 # Function which updates the plot
@@ -200,7 +201,7 @@ fig, ax = plt.subplots()
 ax.set_ylim(y_min, y_max)
 ax.set_xlim(np.min(x), np.max(x))
 ax.set_ylabel('Amplitude')
-ax.set_xlabel('Time')
+ax.set_xlabel('t')
 
 
 # addling lines for the legend
@@ -208,7 +209,7 @@ ax.plot(0, 0, 'r', label='f(t)')
 ax.plot(0, 0, 'b', label='g(t)')
 ax.plot(0, 0, 'k', label='f(t)*g(t)')
 ax.fill(0, 0, 'purple', alpha=0.7, label='area of f(t)g(t)')
-ax.legend(loc='upper right')
+ax.legend(loc='upper left')
 
 # Set up the indices to be plotted if it is not there
 frame_range = np.arange(0, steps, frames_skipped)
