@@ -87,52 +87,60 @@ def your_function(x):
 # Sample code to plot your function
 t = np.linspace(-5, 5, 1000)
 plt.figure()  # Make a figure
-plt.plot(t, triangle(t))  # This is where you se
+plt.plot(t, triangle(t))  # This is where you set the function you want to plot
 plt.show()  # displays the plot in the plotting menu to the right, or it pops out
 
 
-#########################################################
+#############################################################
 #%% 2 - Setting the parameters for the convolution animation#
-#########################################################
+#############################################################
 # This %matplotlib qt5 turns on the popout plots. Type %matplotlib inline to go back to normal
 %matplotlib qt5
 
 # Selecting your functions to convolve
-f = triangle  # Change these to whatever functions you want to convolve
+f = box  # Change these to whatever functions you want to convolve
 g = triangle  # You can define your own above and plot them
 
 # Parameters for time axis
-t_min = -5  # Shortest time to be plotted
-t_max = 5  # Longest time point to be plotted
-y_min = 0  # bottom of y axis
+t_min = -5   # Shortest time to be plotted
+t_max = 5    # Longest time point to be plotted
+y_min = 0    # bottom of y axis
 y_max = 1.5  # top of y axis
 
 # Animation settings
-pause_at_time = 0  # Time to pause animation to save different 
-pause = True  # Will pause at time when set to True
-steps = 2001  # The number of steps in the animation and time points on the x axis
-delay_between_frames = 15 # Specifies how many ms between each fram (lower=faster)
+pause_at_time = 0.5        # Time to pause animation to save different 
+pause_duration = 5         # How long (seconds) to pause for
+pause = True               # Will pause at time when set to True
+steps = 2001               # The number of steps in the animation and time points on the x axis
+delay_between_frames = 15  # Specifies how many ms between each fram (lower=faster)
+frames_skipped = 8         # Number of frames to skip. Improve sperformance. Higher = faster.
+
 
 ## Beyond this point you just have to run the sections not change any parameters 
 #%% 3 - Plotting the functions selected
-x = np.linspace(t_min, t_max, steps*conv_spacing)
+x = np.linspace(t_min, t_max, steps)
 t = np.linspace(t_min, t_max, steps)
 
 # Plotting f(x) and g(x)
 plt.figure()  # Make a figure
 plt.plot(x, f(x), label='f(x)')  # x=x values, f(x)=y values, label adds a label for the legend
 plt.plot(x, g(x), label='g(x)')  # x=x values, g(x)=y values, label adds a label for the legend
+plt.ylim(y_min, y_max)
 plt.legend()  # shows the legend
 plt.show()  # displays the plot in the plotting menu to the right, or it pops out
 
 
 #%% 4 - Displaying the animation for f * g
-
+%matplotlib qt5
+# Perform the convolution
 f_conv_g = np.convolve(f(x), g(x), mode='same') * (x[1]-x[0])
+
+# Figure out which frame to pause on
 pause_frames = None
 if pause:
     pause_frames = np.argmin(np.abs(t-pause_at_time))+1
 
+# Function which updates the plot
 def animate(i, t, ax, pause_frames=None):
     # print(t[i], i)
     area_line, = ax.fill(t, (g(-(t-t[i]))*f(t)), 'purple', alpha=0.7)
@@ -140,24 +148,46 @@ def animate(i, t, ax, pause_frames=None):
     line, = ax.plot(x[:(i+1)], f_conv_g[:(i+1)], color='k')
     if pause_frames is not None:
         if i == pause_frames:
-            time.sleep(5)
+            plt.pause(pause_duration)
     return line, f_line, g_line, area_line
     
 
 fig, ax = plt.subplots()
+
 # Adding static components
 ax.set_ylim(y_min, y_max)
 ax.set_xlim(np.min(x), np.max(x))
 ax.set_ylabel('Amplitude')
 ax.set_xlabel('Time')
 
+# Plotting f since it is static
 f_line, = ax.plot(t, f(t), 'r', label='f(t)')
+
+# addling lines for the legend
 ax.plot(0, 0, 'b', label='g(t)')
 ax.plot(0, 0, 'k', label='f(t)*g(t)')
 ax.fill(0, 0, 'purple', alpha=0.7, label='area of f(t)g(t)')
-ax.legend()
+ax.legend(loc='upper right')
 
+# Set up the indices to be plotted if it is not there
+frame_range = np.arange(0, steps, frames_skipped)
+
+# Insert the frame on which to pause
+if pause_frames not in frame_range:
+    for i in range(len(frame_range)):
+        if frame_range[i] > pause_frames:
+            frame_range = np.insert(frame_range, i, pause_frames)
+            break
+        
+# Insert the frame before the pause if it is not there
+if pause_frames-1 not in frame_range:
+    for i in range(len(frame_range)):
+        if frame_range[i] > pause_frames-1:
+            frame_range = np.insert(frame_range, i, pause_frames-1)
+            break
+end_pause_index = frame_range[-1]
+# create the actual animation    
 ani = animation.FuncAnimation(
-    fig, lambda i: animate(i, t, ax, pause_frames), frames=range(0, steps, 8),
+    fig, lambda j: animate(j, t, ax, pause_frames), frames=frame_range,
     interval=delay_between_frames, blit=True, save_count=50, cache_frame_data=False)
 plt.show()
