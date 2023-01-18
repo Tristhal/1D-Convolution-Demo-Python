@@ -95,10 +95,8 @@ def sinusoid_1_period(x):
 
 # This is a template to write your own function. You can write multiple and use them
 #  for f(x) and g(x) in the next section for the convolution
-# Replace the x**2 with whatever you want
-# You can look up common functions.
-# Some common ones np.exp(x), np.sin(x), np.cos(x)
-# 
+# Replace the x**2 * box(1/2*x) with whatever you want
+
 def your_function(x):
     # quadratic * stretched box
     y_value = x**2 * box(1/2*x)
