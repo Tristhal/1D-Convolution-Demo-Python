@@ -37,7 +37,8 @@ Nothing after this point needs to be modified
     
 4 - Running the animation
     Run this section to see the animation. 
-    ***Remember to close the amination before running another one***
+    *Remember to close the amination before running another one
+    *Remember to adjust the y_min if your function is negative like a sine
     
 Note: to run a section you can press ctrl + enter or right click the area and
  select "run cell". You can also just run the whole file with f5 or the green 
@@ -45,24 +46,28 @@ Note: to run a section you can press ctrl + enter or right click the area and
 Note: If the plotting/program stops working try closing the console 
  (hitting the x) or restarting it (right click on the "Console" tab on the 
  right). If that fails you can restart Spyder.
+
 """
-#%% 0 - Imports (Must run first)
+#%% 1 - Some usefull functions as an example
+# You can right click in a black space and click run cell to run each block in spyder
+# You can also hit ctrl+enter while the area is highlighted
+# You could also just run the whole file with the green play/run button above
+# Imports
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import time
 plt.close('all')  # Closes all plots
 
-#%% 1 - Some usefull functions as an example
-# You can right click in a black space and click run cell to run each block in spyder
-# You can also hit ctrl+enter while the area is highlighted
-# You could also just run the whole file with the green play/run button above
 def box(x):
     T = 0.5
     return (x>-T) * (x<T) * 1.0
 
 def step(x):
     return (x > 0) * 1.0
+
+def biphasic_unitary_step(x):
+    return box(x-0.5)-box(x-1.5)
 
 def exponential(x):
     return np.exp(x)
