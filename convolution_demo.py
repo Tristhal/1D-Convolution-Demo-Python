@@ -167,7 +167,7 @@ if pause:
 # Function which updates the plot
 def animate(i, t, ax, pause_frames=None):
     # print(t[i], i)
-    ax.plot(t, f(t), 'r', label='f(t)')
+    f_line, = ax.plot(t, f(t), 'r', label='f(t)')
     area_line, = ax.fill(t, (g(-(t-t[i]))*f(t)), 'purple', alpha=0.7)
     g_line, = ax.plot(t, g(-(t-t[i])), 'b')
     line, = ax.plot(x[:(i+1)], f_conv_g[:(i+1)], color='k')
