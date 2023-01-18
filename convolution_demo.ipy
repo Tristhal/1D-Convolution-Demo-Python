@@ -131,12 +131,12 @@ y_min = -1.5    # bottom of y axis
 y_max = 2  # top of y axis
 
 # Animation settings
-pause_at_time = [-1, 0.0, 1, 2, 3]  # Times to pause animation to save different
-# pause_at_time = [0, 1]  # An example of pause_at_time which pauses at 0 and 1
+pause_at_time = 0  # Time to pause animation to save different portions
+# pause_at_time = [-1, 0.0, 1, 2, 3]  # An example of pause_at_time which pauses at multiple times
 pause_duration = 3  # How long (seconds) to pause for
-pause = True  # Will pause at time when set to True
+pause = True  # Will pause at the specified time(s) when set to True
 steps = 2001  # The number of steps in the animation and time points on the x axis
-delay_between_frames = 15  # Specifies how many ms between each fram (lower=faster)
+delay_between_frames = 15  # Specifies how many ms between each frame (lower=faster)
 frames_skipped = 8  # Number of frames to skip. Improves performance. Higher = faster.
 
 
