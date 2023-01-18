@@ -120,17 +120,17 @@ plt.show()  # displays the plot in the plotting menu to the right, or it pops ou
 %matplotlib qt5
 
 # Selecting your functions to convolve
-f = box  # Change these to whatever functions you want to convolve
-g = triangle  # You can define your own above and plot them
+f = triangle  # Change these to whatever functions you want to convolve
+g = biphasic_unitary_step  # You can define your own above and plot them
 
 # Parameters for time axis
 t_min = -5   # Shortest time to be plotted
 t_max = 5    # Longest time point to be plotted
-y_min = 0    # bottom of y axis
-y_max = 1.5  # top of y axis
+y_min = -1.5    # bottom of y axis
+y_max = 2  # top of y axis
 
 # Animation settings
-pause_at_time = 0.5        # Time to pause animation to save different 
+pause_at_time = 0.0        # Time to pause animation to save different 
 pause_duration = 5         # How long (seconds) to pause for
 pause = True               # Will pause at time when set to True
 steps = 2001               # The number of steps in the animation and time points on the x axis
@@ -145,9 +145,11 @@ t = np.linspace(t_min, t_max, steps)
 
 # Plotting f(x) and g(x)
 plt.figure()  # Make a figure
-plt.plot(x, f(x), label='f(x)')  # x=x values, f(x)=y values, label adds a label for the legend
-plt.plot(x, g(x), label='g(x)')  # x=x values, g(x)=y values, label adds a label for the legend
+plt.plot(x, f(x), 'r', label='f(x)')  # x=x values, f(x)=y values, label adds a label for the legend
+plt.plot(x, g(x), 'b--', label='g(x)')  # x=x values, g(x)=y values, label adds a label for the legend
 plt.ylim(y_min, y_max)
+plt.xlabel("Time")
+plt.ylabel("Amplitude")
 plt.legend()  # shows the legend
 plt.show()  # displays the plot in the plotting menu to the right, or it pops out
 
