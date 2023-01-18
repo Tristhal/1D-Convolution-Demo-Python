@@ -117,6 +117,9 @@ plt.show()  # displays the plot in the plotting menu to the right, or it pops ou
 #%% 2 - Setting the parameters for the convolution animation#
 #############################################################
 # This %matplotlib qt5 turns on the popout plots. Type %matplotlib inline to go back to normal
+# This line is not python code but rather an instruction to the ipython console
+# As such the red x due to the syntax error is expected and a warning will appear
+# the first time you run it.
 %matplotlib qt5
 
 # Selecting your functions to convolve
@@ -135,7 +138,7 @@ pause_duration = 5         # How long (seconds) to pause for
 pause = True               # Will pause at time when set to True
 steps = 2001               # The number of steps in the animation and time points on the x axis
 delay_between_frames = 15  # Specifies how many ms between each fram (lower=faster)
-frames_skipped = 8         # Number of frames to skip. Improve sperformance. Higher = faster.
+frames_skipped = 8         # Number of frames to skip. Improves performance. Higher = faster.
 
 
 ## Beyond this point you just have to run the sections not change any parameters 
