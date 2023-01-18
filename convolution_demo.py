@@ -92,6 +92,15 @@ def sinusoid_1_period(x):
     y = np.sin(x*(2*np.pi)/period) * box(1/box_stretch*(x-box_shift))
     return y
 
+def sinusoid_1_period_phase_shifted(x):
+    period = np.pi  # set the period of the sine. could make smaller or larger
+    phase_shift = np.pi  # 180 degree phase shift. could change this
+    box_stretch = np.pi  # the box goes from 0 to pi to select only part of the sine
+    
+    box_shift = box_stretch/2  # The box should be shifted so it starts at 0
+    y = np.sin(x*(2*np.pi)/period + phase_shift) * box(1/box_stretch*(x-box_shift))
+    return y
+
 
 # This is a template to write your own function. You can write multiple and use them
 #  for f(x) and g(x) in the next section for the convolution
@@ -107,7 +116,8 @@ def your_function(x):
 # Sample code to plot your function
 t = np.linspace(-5, 5, 1000)
 plt.figure()  # Make a figure
-plt.plot(t, triangle(t))  # This is where you set the function you want to plot
+plt.plot(t, sinusoid_1_period_phase_shifted(t))  # This is where you set the function you want to plot
+plt.plot(t, sinusoid_1_period(t))  # This is where you set the function you want to plot
 plt.show()  # displays the plot in the plotting menu to the right, or it pops out
 
 
@@ -121,12 +131,12 @@ plt.show()  # displays the plot in the plotting menu to the right, or it pops ou
 %matplotlib qt5
 
 # Selecting your functions to convolve
-f = triangle  # Change these to whatever functions you want to convolve
-g = biphasic_unitary_step  # You can define your own above and plot them
+f = sinusoid_1_period  # Change these to whatever functions you want to convolve
+g = sinusoid_1_period_phase_shifted  # You can define your own above and plot them
 
 # Parameters for time axis
-t_min = -5   # Shortest time to be plotted
-t_max = 5    # Longest time point to be plotted
+t_min = -10   # Shortest time to be plotted
+t_max = 10    # Longest time point to be plotted
 y_min = -1.5    # bottom of y axis
 y_max = 2  # top of y axis
 

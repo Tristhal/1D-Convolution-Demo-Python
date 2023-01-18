@@ -85,11 +85,20 @@ def positive_exponential_decay(x):
     return np.exp(-x) * step(x)
 
 def sinusoid_1_period(x):
-    period = np.pi  # set the period of the sin. could make smaller or larger
+    period = np.pi/3  # set the period of the sin. could make smaller or larger
     box_stretch = np.pi  #1 period wide
     box_shift = box_stretch/2  # The box should be shifted so it starts at 0 instead of -0.5
     
     y = np.sin(x*(2*np.pi)/period) * box(1/box_stretch*(x-box_shift))
+    return y
+
+def sinusoid_1_period_phase_shifted(x):
+    period = np.pi/3  # set the period of the sin. could make smaller or larger
+    phase_shift = np.pi  # 180 degree phase shift
+    box_stretch = np.pi  #1 period wide
+    box_shift = box_stretch/2  # The box should be shifted so it starts at 0 instead of -0.5
+    
+    y = np.sin(x*(2*np.pi)/period + phase_shift) * box(1/box_stretch*(x-box_shift))
     return y
 
 
@@ -107,7 +116,8 @@ def your_function(x):
 # Sample code to plot your function
 t = np.linspace(-5, 5, 1000)
 plt.figure()  # Make a figure
-plt.plot(t, triangle(t))  # This is where you set the function you want to plot
+plt.plot(t, sinusoid_1_period_phase_shifted(t))  # This is where you set the function you want to plot
+plt.plot(t, sinusoid_1_period(t))  # This is where you set the function you want to plot
 plt.show()  # displays the plot in the plotting menu to the right, or it pops out
 
 
@@ -121,12 +131,12 @@ plt.show()  # displays the plot in the plotting menu to the right, or it pops ou
 %matplotlib qt5
 
 # Selecting your functions to convolve
-f = triangle  # Change these to whatever functions you want to convolve
-g = biphasic_unitary_step  # You can define your own above and plot them
+f = sinusoid_1_period  # Change these to whatever functions you want to convolve
+g = sinusoid_1_period_phase_shifted  # You can define your own above and plot them
 
 # Parameters for time axis
-t_min = -5   # Shortest time to be plotted
-t_max = 5    # Longest time point to be plotted
+t_min = -10   # Shortest time to be plotted
+t_max = 10    # Longest time point to be plotted
 y_min = -1.5    # bottom of y axis
 y_max = 2  # top of y axis
 
