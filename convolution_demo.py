@@ -160,12 +160,13 @@ if pause:
 # Function which updates the plot
 def animate(i, t, ax, pause_frames=None):
     # print(t[i], i)
+    ax.plot(t, f(t), 'r', label='f(t)')
     area_line, = ax.fill(t, (g(-(t-t[i]))*f(t)), 'purple', alpha=0.7)
     g_line, = ax.plot(t, g(-(t-t[i])), 'b')
     line, = ax.plot(x[:(i+1)], f_conv_g[:(i+1)], color='k')
     if pause_frames is not None:
         if i == pause_frames:
-            plt.pause(pause_duration)
+            time.sleep(pause_duration)
     return line, f_line, g_line, area_line
     
 
@@ -177,10 +178,9 @@ ax.set_xlim(np.min(x), np.max(x))
 ax.set_ylabel('Amplitude')
 ax.set_xlabel('Time')
 
-# Plotting f since it is static
-f_line, = ax.plot(t, f(t), 'r', label='f(t)')
 
 # addling lines for the legend
+ax.plot(0, 0, 'r', label='f(t)')
 ax.plot(0, 0, 'b', label='g(t)')
 ax.plot(0, 0, 'k', label='f(t)*g(t)')
 ax.fill(0, 0, 'purple', alpha=0.7, label='area of f(t)g(t)')
