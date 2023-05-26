@@ -38,6 +38,10 @@ Nothing after this point needs to be modified
     Run this section to see the animation. 
     *Remember to close the amination before running another one
     *Remember to adjust the y_min if your function is negative like a sine
+
+5 - Plot the results at the pause points
+    Run this section to obtain a plot at each of the specified pause points
+    which can then be saved.
     
 Note: to run a section you can press ctrl + enter or right click the area and
  select "run cell". You can also just run the whole file with f5 or the green 
@@ -95,15 +99,23 @@ def sinusoid_1_period(x):
     y = np.sin(x*(2*np.pi)/period) * box(1/box_stretch*(x-box_shift))
     return y
 
-def sinusoid_1_period_phase_shifted(x):
-    period = np.pi  # set the period of the sine. could make smaller or larger
-    phase_shift = np.pi  # 180 degree phase shift. could change this
+def sinusoid_3_period_phase(x):
+    period = 1/3*np.pi  # set the period of the sine. could make smaller or larger
+    phase_shift = 0  # 180 degree phase shift. could change this
     box_stretch = np.pi  # the box goes from 0 to pi to select only part of the sine
     
     box_shift = box_stretch/2  # The box should be shifted so it starts at 0
     y = np.sin(x*(2*np.pi)/period + phase_shift) * box(1/box_stretch*(x-box_shift))
     return y
 
+def sinusoid_3_period_phase_shifted(x):
+    period = 1/3*np.pi  # set the period of the sine. could make smaller or larger
+    phase_shift = np.pi  # 180 degree phase shift. could change this
+    box_stretch = np.pi  # the box goes from 0 to pi to select only part of the sine
+    
+    box_shift = box_stretch/2  # The box should be shifted so it starts at 0
+    y = np.sin(x*(2*np.pi)/period + phase_shift) * box(1/box_stretch*(x-box_shift))
+    return y
 
 # This is a template to write your own function. You can write multiple and use them
 #  for f(x) and g(x) in the next section for the convolution
@@ -119,7 +131,7 @@ def your_function(x):
 # Sample code to plot your function
 t = np.linspace(-5, 5, 1000)
 plt.figure()  # Make a figure
-plt.plot(t, triangle(t))  # This is where you set the function you want to plot
+plt.plot(t, sinusoid_3_period_phase_shifted(t))  # This is where you set the function you want to plot
 plt.show()  # displays the plot in the plotting menu to the right, or it pops out
 
 
@@ -133,8 +145,8 @@ plt.show()  # displays the plot in the plotting menu to the right, or it pops ou
 %matplotlib qt5
 
 # Selecting your functions to convolve
-f = triangle  # Change f & g to whatever functions you want to convolve
-g = positive_exponential_decay  # You can use your own function defined above
+f = box  # Change f & g to whatever functions you want to convolve
+g = triangle  # You can use your own function defined above
 
 # Parameters for t axis
 t_min = -10   # lower limit of x axis 
@@ -143,8 +155,8 @@ y_min = -1.5    # Lower limit of y axis
 y_max = 2  # higher limit of y axis
 
 # Animation settings
-pause_at_t = 0  # t value to pause animation. This is the x axis value.
-# pause_at_t = [-1, 0.0, 1, 2, 3]  # An example of pause_at_t which pauses at multiple t values
+# pause_at_t = 0  # t value to pause animation. This is the x axis value.
+pause_at_t = [-1.5, 0.0, 1.5, 3]  # An example of pause_at_t which pauses at multiple t values
 pause_duration = 3  # How long (seconds) to pause for
 pause = True  # Will pause at the specified t value(s) when set to True
 steps = 2001  # The number of steps in the animation. The x axis is discretized into this number of points.
@@ -236,3 +248,13 @@ ani = animation.FuncAnimation(
     fig, lambda j: animate(j, t, ax, pause_frames), frames=frame_range,
     interval=delay_between_frames, blit=True, save_count=1)#, cache_frame_data=False)
 plt.show()
+
+#%% 5 Plot the results at the pause points
+for i in pause_frames:
+    fig, ax = plt.subplots()
+    ax.plot(t, f(t), 'r', label='f(t)')
+    ax.fill(t, (g(-(t-t[i]))*f(t)), 'purple', alpha=0.7, label='area of f(t)g(t)')
+    ax.plot(t, g(-(t-t[i])), 'b', label='g(t)')
+    ax.plot(x[:(i+1)], f_conv_g[:(i+1)], color='k', label='f(t)*g(t)')
+    ax.legend(loc='upper left')
+    plt.show()
