@@ -149,8 +149,8 @@ f = box  # Change f & g to whatever functions you want to convolve
 g = triangle  # You can use your own function defined above
 
 # Parameters for t axis
-t_min = -10   # lower limit of x axis 
-t_max = 10    # higher limit of x axis 
+t_min = -4   # lower limit of x axis 
+t_max = 4    # higher limit of x axis 
 y_min = -1.5    # Lower limit of y axis
 y_max = 2  # higher limit of y axis
 
@@ -249,7 +249,7 @@ ani = animation.FuncAnimation(
     interval=delay_between_frames, blit=True, save_count=1)#, cache_frame_data=False)
 plt.show()
 
-#%% 5 Plot the results at the pause points
+#%% 5 Plot the results at the pause points (must run 4 first)
 for i in pause_frames:
     fig, ax = plt.subplots()
     ax.plot(t, f(t), 'r', label='f(t)')
