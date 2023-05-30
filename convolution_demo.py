@@ -263,4 +263,6 @@ for i in pause_frames:
     ax.plot(t, g(-(t-t[i])), 'b', label='g(t)')
     ax.plot(x[:(i+1)], f_conv_g[:(i+1)], color='k', label='f(t)*g(t)')
     ax.legend(loc='upper left')
+    ax.set_ylim(y_min, y_max)
+    ax.set_xlim(np.min(x), np.max(x))
     plt.show()
