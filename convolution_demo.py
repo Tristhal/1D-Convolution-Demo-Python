@@ -141,8 +141,8 @@ plt.show()  # displays the plot in the plotting menu to the right, or it pops ou
 # This %matplotlib qt5 turns on the popout plots. Type %matplotlib inline to go back to normal
 # This line is not python code but rather an instruction to the ipython console
 # As such the red x due to the syntax error is expected and a warning will appear
-# the first time you run it.
-%matplotlib qt5
+# the first time you run it in a .py file.
+# %matplotlib qt5
 
 # Selecting your functions to convolve
 f = box  # Change f & g to whatever functions you want to convolve
@@ -157,7 +157,7 @@ y_max = 2  # higher limit of y axis
 # Animation settings
 pause_at_t = 0  # t value to pause animation. This is the x axis value.
 # pause_at_t = [-1.5, 0.0, 1.5, 3]  # An example of pause_at_t which pauses at multiple t values
-pause_duration = 0.1  # How long (seconds) to pause for
+pause_duration = 0.5  # How long (seconds) to pause for
 pause = True  # Will pause at the specified t value(s) when set to True
 steps = 2001  # The number of steps in the animation. The x axis is discretized into this number of points.
 # If "steps" is set to small, a coarse resoution on x axis means you may miss the point pause_at_t and the pause occurs at its nearest neighbor.
@@ -182,7 +182,7 @@ plt.show()  # displays the plot in the plotting menu to the right, or it pops ou
 
 
 #%% 4 - Displaying the animation for f * g
-%matplotlib qt5
+# %matplotlib qt5
 # Perform the convolution
 f_conv_g = np.convolve(f(x), g(x), mode='same') * (x[1]-x[0])
 
@@ -197,17 +197,10 @@ if pause:
             pause_frames.append(np.argmin(np.abs(t-pt))+1)
 
 fig, ax = plt.subplots()
-if save_gif:
-    f_line, = ax.plot(t, f(t), 'r', label='f(t)')
-    g_line, = ax.plot(-t, g(t)*0, 'b', label='g(t)')
-    line, = ax.plot(0, 0, 'k', label='f(t)*g(t)')
-    area_line, = ax.fill(-t, 0*g(t)*f(t)*0, 'purple', alpha=0.7, label='area of f(t)g(t)')
-else:
-    # addling lines for the legend
-    ax.plot(0, 0, 'r', label='f(t)')
-    ax.plot(0, 0, 'b', label='g(t)')
-    ax.plot(0, 0, 'k', label='f(t)*g(t)')
-    ax.fill(0, 0, 'purple', alpha=0.7, label='area of f(t)g(t)')
+f_line, = ax.plot(t, f(t), 'r', label='f(t)')
+g_line, = ax.plot(-t, g(t)*0, 'b', label='g(t)')
+line, = ax.plot(0, 0, 'k', label='f(t)*g(t)')
+area_line, = ax.fill(-t, 0*g(t)*f(t)*0, 'purple', alpha=0.7, label='area of f(t)g(t)')
 
 # Adding static components
 ax.set_ylim(y_min, y_max)
@@ -215,45 +208,37 @@ ax.set_xlim(np.min(x), np.max(x))
 ax.set_ylabel('Amplitude')
 ax.set_xlabel('t')
 
-
 ax.legend(loc='upper left')
 
 # Set up the indices to be plotted if it is not there
 frame_range = np.arange(0, steps, frames_skipped)
 
 # Insert the frame on which to pause
-for pause_frame in pause_frames:
-    if pause_frame not in frame_range:
-        for i in range(len(frame_range)):
-            if frame_range[i] > pause_frame:
-                frame_range = np.insert(frame_range, i, pause_frame)
-                break
-            
-    # Insert the frame before the pause if it is not there
-    if pause_frame-1 not in frame_range:
-        for i in range(len(frame_range)):
-            if frame_range[i] > pause_frame-1:
-                frame_range = np.insert(frame_range, i, pause_frame-1)
-                break
+if pause_frames is not None:
+    for pause_frame in pause_frames:
+        if pause_frame not in frame_range:
+            for i in range(len(frame_range)):
+                if frame_range[i] > pause_frame:
+                    frame_range = np.insert(frame_range, i, pause_frame)
+                    break
+                
+        # Insert the frame before the pause if it is not there
+        if pause_frame-1 not in frame_range:
+            for i in range(len(frame_range)):
+                if frame_range[i] > pause_frame-1:
+                    frame_range = np.insert(frame_range, i, pause_frame-1)
+                    break
 end_pause_index = frame_range[-1]
-
-
 
 # Function which updates the plot
 def animate(i, t, ax, pause_frames=None):
-    # print(t[i], i)
-    # f_line, = ax.plot(t, f(t), 'r', label='f(t)')
-    # area_line, = ax.fill(t, (g(-(t-t[i]))*f(t)), 'purple', alpha=0.7)
-    # g_line, = ax.plot(t, g(-(t-t[i])), 'b')
-    # line, = ax.plot(x[:(i+1)], f_conv_g[:(i+1)], color='k')
-
     xy = np.array([t, (g(-(t-t[i]))*f(t))])
     xy = np.concatenate([xy, xy[:, -1][...,np.newaxis]], axis=-1)
     xy = xy.transpose()
     area_line.set_xy(xy)
     g_line.set_data(t, g(-(t-t[i])))
     line.set_data(x[:(i+1)], f_conv_g[:(i+1)])
-    
+        
     if pause_frames is not None:
         if i in pause_frames:
             time.sleep(pause_duration)
@@ -261,11 +246,13 @@ def animate(i, t, ax, pause_frames=None):
 # create the actual animation    
 ani = animation.FuncAnimation(
     fig, lambda j: animate(j, t, ax, pause_frames), frames=frame_range,
-    interval=delay_between_frames, blit=False, save_count=1)#, cache_frame_data=False)
+    interval=delay_between_frames, blit=True, save_count=1)
 plt.show()
-file = r"./animation.gif" 
-writergif = animation.PillowWriter(fps=30) 
-ani.save(file, writer=writergif)
+
+if save_gif:
+    file = r"./animation.gif" 
+    writergif = animation.PillowWriter(fps=30) 
+    ani.save(file, writer=writergif)
 
 
 #%% 5 Plot the results at the pause points (must run 4 first)
