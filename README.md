@@ -13,4 +13,4 @@ Animation showing the convolution
 | <img src="https://github.com/Tristhal/1D-Convolution-Demo-Python/blob/master/images/Figure_1.png"> | <img src="https://github.com/Tristhal/1D-Convolution-Demo-Python/blob/master/images/Figure_2.png"> | <img src="https://github.com/Tristhal/1D-Convolution-Demo-Python/blob/master/images/Figure_3.png"> |
 
 
-Matplotlib and numpy are required to run this program. The animated plot uses the qt5 interface and was tested in the Spyder IDE.
+Matplotlib and numpy are required to run this program. The animated plot uses the qt5 GUI and was tested in the Spyder IDE.
