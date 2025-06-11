@@ -131,7 +131,7 @@ def your_function(x):
 # Sample code to plot your function
 t = np.linspace(-5, 5, 1000)
 plt.figure()  # Make a figure
-plt.plot(t, sinusoid_3_period_phase_shifted(t))  # This is where you set the function you want to plot
+plt.plot(t, your_function(t))  # This is where you set the function you want to plot
 plt.show()  # displays the plot in the plotting menu to the right, or it pops out
 
 
@@ -161,8 +161,8 @@ pause_duration = 0.5  # How long (seconds) to pause for
 pause = True  # Will pause at the specified t value(s) when set to True
 steps = 2001  # The number of steps in the animation. The x axis is discretized into this number of points.
 # If "steps" is set to small, a coarse resoution on x axis means you may miss the point pause_at_t and the pause occurs at its nearest neighbor.
-delay_between_frames = 15  # Specifies how many ms between each frame (lower=faster)
-frames_skipped = 8  # Number of frames to skip. Improves performance. Higher = faster.
+delay_between_frames = 5  # Specifies how many ms between each frame (lower=faster)
+frames_skipped = 4  # Number of frames to skip. Improves performance. Higher = faster.
 save_gif = True
 
 ## Beyond this point you only need to run the sections without changing any parameters 
@@ -251,7 +251,7 @@ plt.show()
 
 if save_gif:
     file = r"./animation.gif" 
-    writergif = animation.PillowWriter(fps=30) 
+    writergif = animation.PillowWriter(fps=50) 
     ani.save(file, writer=writergif)
 
 
